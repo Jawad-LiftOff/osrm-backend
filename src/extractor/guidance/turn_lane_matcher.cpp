@@ -1,5 +1,5 @@
-#include "extractor/guidance/toolkit.hpp"
 #include "extractor/guidance/turn_lane_matcher.hpp"
+#include "extractor/guidance/toolkit.hpp"
 #include "util/guidance/toolkit.hpp"
 
 #include <boost/assert.hpp>
@@ -169,6 +169,7 @@ bool canMatchTrivially(const Intersection &intersection, const LaneDataVector &l
 
 Intersection triviallyMatchLanesToTurns(Intersection intersection,
                                         const LaneDataVector &lane_data,
+                                        const LaneStringID lane_string_id,
                                         const util::NodeBasedDynamicGraph &node_based_graph)
 {
     std::size_t road_index = 1, lane = 0;

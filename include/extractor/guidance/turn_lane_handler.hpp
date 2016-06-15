@@ -58,7 +58,8 @@ class TurnLaneHandler
 
     // in case of a simple intersection, assign the lane entries
     Intersection simpleMatchTuplesToTurns(Intersection intersection,
-                                          const LaneDataVector &lane_data) const;
+                                          const LaneDataVector &lane_data,
+                                          const LaneStringID lane_string_id) const;
 
     // partition lane data into lane data relevant at current turn and at next turn
     std::pair<TurnLaneHandler::LaneDataVector, TurnLaneHandler::LaneDataVector> partitionLaneData(

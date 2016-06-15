@@ -44,6 +44,7 @@ bool canMatchTrivially(const Intersection &intersection, const LaneDataVector &l
 // perform a trivial match on the turn lanes
 Intersection triviallyMatchLanesToTurns(Intersection intersection,
                                         const LaneDataVector &lane_data,
+                                        const LaneStringID lane_string_id,
                                         const util::NodeBasedDynamicGraph &node_based_graph);
 
 } // namespace lanes
