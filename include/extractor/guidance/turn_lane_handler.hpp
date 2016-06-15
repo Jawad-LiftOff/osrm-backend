@@ -2,6 +2,7 @@
 #define OSRM_EXTRACTOR_GUIDANCE_TURN_LANE_HANDLER_HPP_
 
 #include "extractor/guidance/intersection.hpp"
+#include "extractor/guidance/toolkit.hpp"
 #include "extractor/guidance/turn_analysis.hpp"
 #include "extractor/guidance/turn_lane_data.hpp"
 #include "extractor/query_node.hpp"
@@ -13,7 +14,6 @@
 
 #include <map>
 #include <string>
-#include <unordered_map>
 #include <utility>
 #include <vector>
 
@@ -41,10 +41,7 @@ class TurnLaneHandler
     Intersection assignTurnLanes(const NodeID at, const EdgeID via_edge, Intersection intersection);
 
   private:
-    using LaneTupel = util::guidance::LaneTupel;
-    using LaneTupelToStringIdMap = std::unordered_map<LaneTupel, LaneStringID>;
-
-    LaneTupelToStringIdMap lane_tupels;
+    LaneTupelIdMap lane_tupels;
 
     // we need to be able to look at previous intersections to, in some cases, find the correct turn
     // lanes for a turn

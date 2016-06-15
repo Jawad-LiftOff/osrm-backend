@@ -2,6 +2,7 @@
 #define OSRM_EXTRACTOR_GUIDANCE_TURN_LANE_MATCHER_HPP_
 
 #include "extractor/guidance/intersection.hpp"
+#include "extractor/guidance/toolkit.hpp"
 #include "extractor/guidance/turn_instruction.hpp"
 #include "extractor/guidance/turn_lane_data.hpp"
 
@@ -44,12 +45,11 @@ typename Intersection::const_iterator findBestMatchForReverse(const std::string 
 bool canMatchTrivially(const Intersection &intersection, const LaneDataVector &lane_data);
 
 // perform a trivial match on the turn lanes
-Intersection triviallyMatchLanesToTurns(
-    Intersection intersection,
-    const LaneDataVector &lane_data,
-    const util::NodeBasedDynamicGraph &node_based_graph,
-    const LaneStringID lane_string_id,
-    std::unordered_map<util::guidance::LaneTupel, LaneStringID> &lane_tupel_to_string_id);
+Intersection triviallyMatchLanesToTurns(Intersection intersection,
+                                        const LaneDataVector &lane_data,
+                                        const util::NodeBasedDynamicGraph &node_based_graph,
+                                        const LaneStringID lane_string_id,
+                                        LaneTupelIdMap &lane_tupel_to_string_id);
 
 } // namespace lanes
 } // namespace guidance

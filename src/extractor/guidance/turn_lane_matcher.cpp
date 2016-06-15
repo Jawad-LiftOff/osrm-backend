@@ -4,6 +4,8 @@
 
 #include <boost/assert.hpp>
 
+#include <functional>
+
 namespace osrm
 {
 namespace extractor
@@ -167,12 +169,11 @@ bool canMatchTrivially(const Intersection &intersection, const LaneDataVector &l
            (lane + 1 == lane_data.size() && lane_data.back().tag == "reverse");
 }
 
-Intersection triviallyMatchLanesToTurns(
-    Intersection intersection,
-    const LaneDataVector &lane_data,
-    const util::NodeBasedDynamicGraph &node_based_graph,
-    const LaneStringID lane_string_id,
-    std::unordered_map<util::guidance::LaneTupel, LaneStringID> &lane_tupel_to_string_id)
+Intersection triviallyMatchLanesToTurns(Intersection intersection,
+                                        const LaneDataVector &lane_data,
+                                        const util::NodeBasedDynamicGraph &node_based_graph,
+                                        const LaneStringID lane_string_id,
+                                        LaneTupelIdMap &lane_tupel_to_string_id)
 {
     std::size_t road_index = 1, lane = 0;
     for (; road_index < intersection.size() && lane < lane_data.size(); ++road_index)
@@ -188,8 +189,15 @@ Intersection triviallyMatchLanesToTurns(
             if (TurnType::Suppressed == intersection[road_index].turn.instruction.type)
                 intersection[road_index].turn.instruction.type = TurnType::UseLane;
 
-            intersection[road_index].turn.instruction.lane_tupel = {
-                LaneID(lane_data[lane].to - lane_data[lane].from + 1), lane_data[lane].from};
+            LaneTupelIdPair key{
+                {LaneID(lane_data[lane].to - lane_data[lane].from + 1), lane_data[lane].from},
+                lane_string_id};
+
+            auto it = lane_tupel_to_string_id.find(key);
+
+            // TODO: remove when we're done with the switch to ids
+            intersection[road_index].turn.instruction.lane_tupel = key.first;
+
             ++lane;
         }
     }
