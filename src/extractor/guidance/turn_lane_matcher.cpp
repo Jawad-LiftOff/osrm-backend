@@ -167,10 +167,12 @@ bool canMatchTrivially(const Intersection &intersection, const LaneDataVector &l
            (lane + 1 == lane_data.size() && lane_data.back().tag == "reverse");
 }
 
-Intersection triviallyMatchLanesToTurns(Intersection intersection,
-                                        const LaneDataVector &lane_data,
-                                        const LaneStringID lane_string_id,
-                                        const util::NodeBasedDynamicGraph &node_based_graph)
+Intersection triviallyMatchLanesToTurns(
+    Intersection intersection,
+    const LaneDataVector &lane_data,
+    const util::NodeBasedDynamicGraph &node_based_graph,
+    const LaneStringID lane_string_id,
+    std::unordered_map<util::guidance::LaneTupel, LaneStringID> &lane_tupel_to_string_id)
 {
     std::size_t road_index = 1, lane = 0;
     for (; road_index < intersection.size() && lane < lane_data.size(); ++road_index)

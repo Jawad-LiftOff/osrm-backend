@@ -56,9 +56,8 @@ TurnLaneHandler::TurnLaneHandler(const util::NodeBasedDynamicGraph &node_based_g
     with a string like  |left|through;right|right| and performs an assignment onto the turns:
     for example: (130, turn slight right), (180, ramp straight), (320, turn sharp left)
  */
-Intersection TurnLaneHandler::assignTurnLanes(const NodeID at,
-                                              const EdgeID via_edge,
-                                              Intersection intersection) const
+Intersection
+TurnLaneHandler::assignTurnLanes(const NodeID at, const EdgeID via_edge, Intersection intersection)
 {
     // initialize to invalid
     for (auto &road : intersection)
@@ -158,7 +157,7 @@ Intersection TurnLaneHandler::assignTurnLanes(const NodeID at,
 // actually take the turn, we need to look back to the edge we drove onto the intersection with.
 Intersection TurnLaneHandler::handleTurnAtPreviousIntersection(const NodeID at,
                                                                const EdgeID via_edge,
-                                                               Intersection intersection) const
+                                                               Intersection intersection)
 {
     NodeID previous_node = SPECIAL_NODEID;
     Intersection previous_intersection;
@@ -488,7 +487,7 @@ std::pair<LaneDataVector, LaneDataVector> TurnLaneHandler::partitionLaneData(
 
 Intersection TurnLaneHandler::simpleMatchTuplesToTurns(Intersection intersection,
                                                        const LaneDataVector &lane_data,
-                                                       const LaneStringID lane_string_id) const
+                                                       const LaneStringID lane_string_id)
 {
     if (lane_data.empty() || !canMatchTrivially(intersection, lane_data))
         return std::move(intersection);
@@ -498,7 +497,8 @@ Intersection TurnLaneHandler::simpleMatchTuplesToTurns(Intersection intersection
                      return boost::starts_with(data.tag, "merge");
                  }) == 0);
 
-    return triviallyMatchLanesToTurns(std::move(intersection), lane_data, lane_string_id, node_based_graph);
+    return triviallyMatchLanesToTurns(
+        std::move(intersection), lane_data, node_based_graph, lane_string_id, lane_tupels);
 }
 
 } // namespace lanes

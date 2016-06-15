@@ -38,12 +38,13 @@ class TurnLaneHandler
                     const std::vector<QueryNode> &node_info_list,
                     const TurnAnalysis &turn_analysis);
 
-    Intersection
-    assignTurnLanes(const NodeID at, const EdgeID via_edge, Intersection intersection) const;
+    Intersection assignTurnLanes(const NodeID at, const EdgeID via_edge, Intersection intersection);
 
   private:
     using LaneTupel = util::guidance::LaneTupel;
-    std::unordered_map<LaneTupel, std::uint16_t> lane_tupels;
+    using LaneTupelToStringIdMap = std::unordered_map<LaneTupel, LaneStringID>;
+
+    LaneTupelToStringIdMap lane_tupels;
 
     // we need to be able to look at previous intersections to, in some cases, find the correct turn
     // lanes for a turn
@@ -59,7 +60,7 @@ class TurnLaneHandler
     // in case of a simple intersection, assign the lane entries
     Intersection simpleMatchTuplesToTurns(Intersection intersection,
                                           const LaneDataVector &lane_data,
-                                          const LaneStringID lane_string_id) const;
+                                          const LaneStringID lane_string_id);
 
     // partition lane data into lane data relevant at current turn and at next turn
     std::pair<TurnLaneHandler::LaneDataVector, TurnLaneHandler::LaneDataVector> partitionLaneData(
@@ -69,7 +70,7 @@ class TurnLaneHandler
     // intersection whose turns might be related to this current intersection
     Intersection handleTurnAtPreviousIntersection(const NodeID at,
                                                   const EdgeID via_edge,
-                                                  Intersection intersection) const;
+                                                  Intersection intersection);
 };
 
 } // namespace lanes

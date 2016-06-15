@@ -8,6 +8,8 @@
 #include "util/guidance/turn_lanes.hpp"
 #include "util/node_based_graph.hpp"
 
+#include <unordered_map>
+
 namespace osrm
 {
 namespace extractor
@@ -42,10 +44,12 @@ typename Intersection::const_iterator findBestMatchForReverse(const std::string 
 bool canMatchTrivially(const Intersection &intersection, const LaneDataVector &lane_data);
 
 // perform a trivial match on the turn lanes
-Intersection triviallyMatchLanesToTurns(Intersection intersection,
-                                        const LaneDataVector &lane_data,
-                                        const LaneStringID lane_string_id,
-                                        const util::NodeBasedDynamicGraph &node_based_graph);
+Intersection triviallyMatchLanesToTurns(
+    Intersection intersection,
+    const LaneDataVector &lane_data,
+    const util::NodeBasedDynamicGraph &node_based_graph,
+    const LaneStringID lane_string_id,
+    std::unordered_map<util::guidance::LaneTupel, LaneStringID> &lane_tupel_to_string_id);
 
 } // namespace lanes
 } // namespace guidance
