@@ -3,6 +3,7 @@
 #include "util/guidance/toolkit.hpp"
 
 #include <boost/assert.hpp>
+#include <boost/numeric/conversion/cast.hpp>
 
 #include <functional>
 
@@ -193,10 +194,19 @@ Intersection triviallyMatchLanesToTurns(Intersection intersection,
                 {LaneID(lane_data[lane].to - lane_data[lane].from + 1), lane_data[lane].from},
                 lane_string_id};
 
-            auto it = lane_tupel_to_string_id.find(key);
+            auto lane_tupel_id = boost::numeric_cast<std::uint16_t>(lane_tupel_to_string_id.size());
+            const auto it = lane_tupel_to_string_id.find(key);
+
+            if (it == lane_tupel_to_string_id.end())
+                lane_tupel_to_string_id.insert({key, lane_tupel_id});
+            else
+                lane_tupel_id = it->second;
 
             // TODO: remove when we're done with the switch to ids
             intersection[road_index].turn.instruction.lane_tupel = key.first;
+
+            // set lane id instead after the switch:
+            intersection[road_index].turn.instruction.lane_tupel_id = lane_tupel_id;
 
             ++lane;
         }
@@ -220,8 +230,25 @@ Intersection triviallyMatchLanesToTurns(Intersection intersection,
         intersection[u_turn].entry_allowed = true;
         intersection[u_turn].turn.instruction.type = TurnType::Turn;
         intersection[u_turn].turn.instruction.direction_modifier = DirectionModifier::UTurn;
-        intersection[u_turn].turn.instruction.lane_tupel = {
-            LaneID(lane_data.back().to - lane_data.back().from + 1), lane_data.back().from};
+
+        // TODO: code dup. with above, refactor
+        LaneTupelIdPair key{
+            {LaneID(lane_data.back().to - lane_data.back().from + 1), lane_data.back().from},
+            lane_string_id};
+
+        auto lane_tupel_id = boost::numeric_cast<std::uint16_t>(lane_tupel_to_string_id.size());
+        const auto it = lane_tupel_to_string_id.find(key);
+
+        if (it == lane_tupel_to_string_id.end())
+            lane_tupel_to_string_id.insert({key, lane_tupel_id});
+        else
+            lane_tupel_id = it->second;
+
+        // TODO: remove when we're done with the switch to ids
+        intersection[u_turn].turn.instruction.lane_tupel = key.first;
+
+        // set lane id instead after the switch:
+        intersection[road_index].turn.instruction.lane_tupel_id = lane_tupel_id;
     }
     return std::move(intersection);
 }
