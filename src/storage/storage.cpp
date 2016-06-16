@@ -407,6 +407,7 @@ int Storage::Run()
     boost::filesystem::ifstream lane_data_stream(config.turn_lane_data_path, std::ios::binary);
     std::uint64_t lane_tupel_count = 0;
     lane_data_stream.read(reinterpret_cast<char*>(&lane_tupel_count),sizeof(lane_tupel_count));
+    shared_layout_ptr->SetBlockSize<util::guidance::LaneTupelIdPair>(SharedDataLayout::TURN_LANE_DATA,lane_tupel_count);
 
     // allocate shared memory block
     util::SimpleLogger().Write() << "allocating shared memory of "
