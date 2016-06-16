@@ -205,6 +205,8 @@ Intersection triviallyMatchLanesToTurns(Intersection intersection,
             // set lane id instead after the switch:
             intersection[road_index].turn.lane_data_id = lane_data_id;
 
+            std::cout << "Hashed: " << (int)lane_data[lane].from << " " << (int)lane_data[lane].to << " " << (int)lane_string_id << " to " << (int)lane_data_id << std::endl;
+
             ++lane;
         }
     }
@@ -241,8 +243,10 @@ Intersection triviallyMatchLanesToTurns(Intersection intersection,
         else
             lane_data_id = it->second;
 
+        std::cout << "Hashed: " << (int)lane_data[lane].from << " " << (int)lane_data[lane].to << " " << (int)lane_string_id << " to " << (int)lane_data_id << std::endl;
+
         // set lane id instead after the switch:
-        intersection[road_index].turn.lane_data_id = lane_data_id;
+        intersection[u_turn].turn.lane_data_id = lane_data_id;
     }
     return std::move(intersection);
 }

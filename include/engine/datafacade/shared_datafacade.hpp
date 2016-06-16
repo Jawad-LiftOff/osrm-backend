@@ -193,13 +193,11 @@ class SharedDataFacade final : public BaseDataFacade
             travel_mode_list_ptr, data_layout->num_entries[storage::SharedDataLayout::TRAVEL_MODE]);
         m_travel_mode_list = std::move(travel_mode_list);
 
-        std::cout << "Lane Data" << std::endl;
         auto lane_data_id_ptr = data_layout->GetBlockPtr<LaneDataID>(
             shared_memory, storage::SharedDataLayout::LANE_DATA_ID);
         util::ShM<LaneDataID, true>::vector lane_data_id(
             lane_data_id_ptr, data_layout->num_entries[storage::SharedDataLayout::LANE_DATA_ID]);
         m_lane_data_id = std::move(lane_data_id);
-        std::cout << "done." << std::endl;
 
         auto lane_tupel_id_pair_ptr = data_layout->GetBlockPtr<util::guidance::LaneTupelIdPair>(
             shared_memory, storage::SharedDataLayout::TURN_LANE_DATA);
@@ -456,16 +454,12 @@ class SharedDataFacade final : public BaseDataFacade
 
                 LoadGraph();
                 LoadChecksum();
-                std::cout << "Nodes" << std::endl;
                 LoadNodeAndEdgeInformation();
-                std::cout << "Geometry" << std::endl;
                 LoadGeometries();
                 LoadTimestamp();
                 LoadViaNodeList();
                 LoadNames();
-                std::cout << "Turn Lane Strings" << std::endl;
                 LoadTurnLaneStrings();
-                std::cout << "Core" << std::endl;
                 LoadCoreInformation();
                 LoadProfileProperties();
                 LoadRTree();
