@@ -1050,7 +1050,7 @@ std::vector<RouteStep> anticipateLaneChange(std::vector<RouteStep> steps)
     };
 
     util::group_by(begin(steps), end(steps), is_quick_turn, keep_turn_range);
-
+#if 0
     // Walk backwards over all turns, constraining possible turn lanes.
     // Later turn lanes constrain earlier ones: we have to anticipate lane changes.
     const auto constrain_lanes = [](const StepIterRange &turns) {
@@ -1104,7 +1104,7 @@ std::vector<RouteStep> anticipateLaneChange(std::vector<RouteStep> steps)
     };
 
     std::for_each(begin(subsequent_quick_turns), end(subsequent_quick_turns), constrain_lanes);
-
+#endif
     return steps;
 }
 

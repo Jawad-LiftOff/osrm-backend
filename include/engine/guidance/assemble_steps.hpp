@@ -14,6 +14,7 @@
 #include "util/coordinate_calculation.hpp"
 #include "util/guidance/entry_class.hpp"
 #include "util/guidance/toolkit.hpp"
+#include "util/guidance/turn_lanes.hpp"
 #include "util/typedefs.hpp"
 
 #include <boost/optional.hpp>
@@ -70,7 +71,9 @@ std::vector<RouteStep> assembleSteps(const DataFacadeT &facade,
                           bearings.second,
                           extractor::guidance::TurnInstruction::NO_TURN(),
                           WaypointType::Depart,
-                          0};
+                          0,
+                          util::guidance::LaneTupel(),
+                          ""};
     Intersection intersection{source_node.location,
                               std::vector<short>({bearings.second}),
                               std::vector<bool>({true}),
@@ -147,7 +150,11 @@ std::vector<RouteStep> assembleSteps(const DataFacadeT &facade,
                             bearings.second,
                             path_point.turn_instruction,
                             WaypointType::None,
-                            0};
+                            0,
+                            path_point.lane_data.first,
+                            (path_point.lane_data.second != INVALID_LANE_STRINGID
+                                 ? facade.GetTurnStringForID(path_point.lane_data.second)
+                                 : "")};
                 segment_index++;
                 segment_duration = 0;
             }
@@ -202,7 +209,9 @@ std::vector<RouteStep> assembleSteps(const DataFacadeT &facade,
                 bearings.second,
                 extractor::guidance::TurnInstruction::NO_TURN(),
                 WaypointType::Arrive,
-                0};
+                0,
+                util::guidance::LaneTupel(),
+                ""};
     intersection = {
         target_node.location,
         std::vector<short>({static_cast<short>(util::bearing::reverseBearing(bearings.first))}),

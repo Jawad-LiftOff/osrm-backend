@@ -63,7 +63,7 @@ inline bool isValidModifier(const guidance::StepManeuver maneuver)
 
 inline bool hasValidLanes(const guidance::StepManeuver maneuver)
 {
-    return maneuver.instruction.lane_tupel.lanes_in_turn > 0;
+    return maneuver.lanes.lanes_in_turn > 0;
 }
 
 std::string instructionTypeToString(const TurnType::Enum type)
@@ -71,12 +71,12 @@ std::string instructionTypeToString(const TurnType::Enum type)
     return turn_type_names[static_cast<std::size_t>(type)];
 }
 
-util::json::Array laneArrayFromLaneTupe(const util::guidance::LaneTupel lane_tupel)
+util::json::Array lanesFromManeuver(const guidance::StepManeuver &maneuver)
 {
-    BOOST_ASSERT(lane_tupel.lanes_in_turn >= 1);
+    BOOST_ASSERT(maneuver.lanes.lanes_in_turn >= 1);
     util::json::Array result;
-    for (LaneID i = 0; i < lane_tupel.lanes_in_turn; ++i)
-        result.values.push_back(lane_tupel.first_lane_from_the_right + i);
+    for (LaneID i = 0; i < maneuver.lanes.lanes_in_turn; ++i)
+        result.values.push_back(maneuver.lanes.first_lane_from_the_right + i);
     return result;
 }
 
@@ -163,7 +163,7 @@ util::json::Object makeStepManeuver(const guidance::StepManeuver &maneuver)
 
     if (detail::hasValidLanes(maneuver))
         step_maneuver.values["lanes"] =
-            detail::laneArrayFromLaneTupe(maneuver.instruction.lane_tupel);
+            detail::lanesFromManeuver(maneuver);
 
     step_maneuver.values["location"] = detail::coordinateToLonLat(maneuver.location);
     step_maneuver.values["bearing_before"] = std::round(maneuver.bearing_before);
